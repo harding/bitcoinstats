@@ -952,7 +952,7 @@ def generatePage(y=nil, m=nil)
 				me -= 1
 				de = calendardays(ye, me)
 			end
-			# Only no data unless there's 2 full months of data or more.
+			# Provide no data unless there's 2 full months of data or more.
 			if ys != ye or ms != me
 				(ys..ye).each do |yi|
 					msi = ys == yi ? ms : 1
