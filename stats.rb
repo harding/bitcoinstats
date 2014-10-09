@@ -570,8 +570,8 @@ def proceed
 	lognum = $startlog
 
 	begin
-		$saveloggz = File.open(DBPATH + '/logs/tmp.log.gz', 'w')
-		$savelog = Zlib::GzipWriter.wrap($saveloggz)
+		$tmploggz = File.open(DBPATH + '/logs/tmp.log.gz', 'w')
+		$tmplog = Zlib::GzipWriter.wrap($tmploggz)
 
 		$tmpdb.execute 'BEGIN'
 
@@ -604,8 +604,8 @@ def proceed
 		$tmpdb.execute 'COMMIT'
 
 	ensure
-		$savelog.close if !$savelog.closed?
-		$saveloggz.close if !$saveloggz.nil? and !$saveloggz.closed?
+		$tmplog.close if !$tmplog.closed?
+		$tmploggz.close if !$tmploggz.nil? and !$tmploggz.closed?
 	end
 
 end
@@ -622,7 +622,7 @@ def updateStats(line)
 	return if data['time'] >= $stoptime or data['time'] < $starttime
 
 	# save log line temporarily.
-	$savelog.puts line
+	$tmplog.puts line
 
 	# Set variables.
 	y = data['year']
