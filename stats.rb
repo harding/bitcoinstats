@@ -738,7 +738,7 @@ def saveStats
 		end
 	end
 
-	# Update visitors database with data in temporary database.
+	# Update visitors database with data in temporary database and delete temporary database.
 	s = $tmpdb.prepare 'SELECT `id`, `year`, `month` FROM `visitors`'
 	r = s.execute
 	r.each do |row|
@@ -748,6 +748,8 @@ def saveStats
 		ss.close
 	end
 	s.close
+	$tmpdb.close
+	File.delete(DBPATH + '/tmp.db')
 
 	# Save stoptime to database to resume the script later.
 	s = $db.prepare 'INSERT OR REPLACE INTO `config` (`id`, `data`) VALUES (\'resume\', ?)'
@@ -756,10 +758,6 @@ def saveStats
 	s.close
 
 	$db.execute 'COMMIT'
-
-	# Close and delete temporary database.
-	$tmpdb.close
-	File.delete(DBPATH + '/tmp.db')
 
 end
 
